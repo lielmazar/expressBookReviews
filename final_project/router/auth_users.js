@@ -37,17 +37,20 @@ regd_users.post("/login", (req,res) => {
             }
             return res.status(200).send("User successfully logged in");
         } else {
-            return res.status(208).json({ message: "Invalid Login. Check username and password" })
+            return res.status(400).json({ message: "Invalid Login. Check username and password" })
         }
     } else {
-        return res.status(404).json({ message: "Error logging in" });
+        return res.status(400).json({ message: "Error logging in" });
     }
 });
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    let user = req.session.authorization['username'];
+    let review = req.query.review;
+    let isbn = req.params.isbn;
+    books[isbn].reviews[user] = review;
+    return res.status(200).json(books[isbn]);
 });
 
 module.exports.authenticated = regd_users;
